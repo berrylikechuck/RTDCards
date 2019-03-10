@@ -15,7 +15,7 @@ class RtdCardsBlock extends BlockBase {
      */
     public function build() {
         $build['#markup'] = $this->t('<div id="cards-app"></div>');
-
+        $build['#attached']['library'][] = 'rtd_cards/cards';
         return $build;
     }
 }

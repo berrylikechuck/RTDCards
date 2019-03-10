@@ -1,3 +1,6 @@
 cards:
+  css:
+    component:
+      css/select-styles.css: {}
   js:
     js/bundle.js: {}

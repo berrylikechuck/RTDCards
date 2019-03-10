@@ -1,7 +1,7 @@
 {
   "name": "search",
   "version": "1.0.0",
-  "description": "search cores equipment",
+  "description": "search for content types by taxonomy term",
   "main": "index.js",
   "scripts": {
     "webpack": "webpack"

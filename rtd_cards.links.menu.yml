@@ -1,0 +1,7 @@
+rtd_cards.default_form:
+  title: 'RTD Cards'
+  route_name: rtd_cards.default_form
+  description: 'Configure RTD Cards'
+  parent: system.admin_config_services
+
+

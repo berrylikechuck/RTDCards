@@ -1,0 +1,28 @@
+{
+  "name": "search",
+  "version": "1.0.0",
+  "description": "search cores equipment",
+  "main": "index.js",
+  "scripts": {
+    "webpack": "webpack"
+  },
+  "author": "Matt Berry",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.16.2",
+    "body-parser": "^1.18.2",
+    "prop-types": "^15.6.0",
+    "react": "^16.0.0",
+    "react-autocomplete": "^1.7.2",
+    "react-dom": "^16.0.0",
+    "react-select": "^1.0.0-rc.10"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "webpack": "^3.8.1"
+  }
+}

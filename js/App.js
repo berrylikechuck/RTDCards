@@ -8,7 +8,7 @@ import CoreList from './CoreList';
 class App extends Component{
 
     state = {
-        cores: [],
+        cards: [],
         currentTid: 0,
         tidList: []
     };
@@ -18,14 +18,14 @@ class App extends Component{
     }
 
     performSearch = (query) => {
-        axios.get('/data/cores', {
+        axios.get('/data/cards', {
                 params: {
                     q: query
                 }
             })
             .then(response => {
                 this.setState({
-                    cores: response.data
+                    cards: response.data
                 });
             })
             .catch(error => {
@@ -55,7 +55,7 @@ class App extends Component{
             <div>
                 <SearchForm onSearch={this.filterCores} />
                 <div className="coresList">
-                    <CoreList data={this.state.cores.filter( core => {
+                    <CoreList data={this.state.cards.filter( core => {
                         return (this.state.tidList.length == 0 || this.doesCoreContainTid(core.tids))
                     })} />
                 </div>
@@ -68,5 +68,5 @@ class App extends Component{
 
 ReactDOM.render(
     <App />,
-    document.getElementById('cores-app')
+    document.getElementById('cards-app')
 );

@@ -14,7 +14,7 @@ class RtdCardsBlock extends BlockBase {
      * {@inheritdoc}
      */
     public function build() {
-        $build['#markup'] = $this->t('<div id="app">working</div>');
+        $build['#markup'] = $this->t('<div id="cards-app"></div>');
 
         return $build;
     }

@@ -1333,9 +1333,9 @@ var _SearchForm = __webpack_require__(46);
 
 var _SearchForm2 = _interopRequireDefault(_SearchForm);
 
-var _CoreList = __webpack_require__(54);
+var _CardList = __webpack_require__(54);
 
-var _CoreList2 = _interopRequireDefault(_CoreList);
+var _CardList2 = _interopRequireDefault(_CardList);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1375,7 +1375,7 @@ var App = function (_Component) {
             }).catch(function (error) {
                 console.log('Error fetching and parsing data', error);
             });
-        }, _this.filterCores = function (tids) {
+        }, _this.filterCards = function (tids) {
             if (!tids) {
                 _this.setState({
                     tidList: []
@@ -1385,7 +1385,7 @@ var App = function (_Component) {
             _this.setState({
                 tidList: tids.split(',')
             });
-        }, _this.doesCoreContainTid = function (coreTids) {
+        }, _this.doesCardContainTid = function (coreTids) {
             return _this.state.tidList.some(function (v) {
                 return coreTids.includes(v);
             });
@@ -1405,12 +1405,12 @@ var App = function (_Component) {
             return _react2.default.createElement(
                 'div',
                 null,
-                _react2.default.createElement(_SearchForm2.default, { onSearch: this.filterCores }),
+                _react2.default.createElement(_SearchForm2.default, { onSearch: this.filterCards }),
                 _react2.default.createElement(
                     'div',
-                    { className: 'coresList' },
-                    _react2.default.createElement(_CoreList2.default, { data: this.state.cards.filter(function (core) {
-                            return _this2.state.tidList.length == 0 || _this2.doesCoreContainTid(core.tids);
+                    { className: 'cardsList' },
+                    _react2.default.createElement(_CardList2.default, { data: this.state.cards.filter(function (card) {
+                            return _this2.state.tidList.length == 0 || _this2.doesCardContainTid(card.tids);
                         }) })
                 )
             );
@@ -31037,30 +31037,30 @@ var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _Core = __webpack_require__(55);
+var _Card = __webpack_require__(55);
 
-var _Core2 = _interopRequireDefault(_Core);
+var _Card2 = _interopRequireDefault(_Card);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var CoreList = function CoreList(props) {
+var CardList = function CardList(props) {
 
     //const results = props.data;
-    var cores = void 0;
+    var cards = void 0;
     if (props.data.length) {
-        cores = props.data.map(function (core) {
-            return _react2.default.createElement(_Core2.default, { key: core.id, id: core.id, title: core.name, description: core.body, tids: core.tids, terms: core.terms, image: core.image });
+        cards = props.data.map(function (card) {
+            return _react2.default.createElement(_Card2.default, { key: card.id, id: card.id, title: card.name, description: card.body, tids: card.tids, terms: card.terms, image: card.image });
         });
     }
 
     return _react2.default.createElement(
         'div',
         null,
-        cores
+        cards
     );
 };
 
-exports.default = CoreList;
+exports.default = CardList;
 
 /***/ }),
 /* 55 */
@@ -31087,7 +31087,7 @@ var _Term2 = _interopRequireDefault(_Term);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Core = function Core(props) {
+var Card = function Card(props) {
     return _react2.default.createElement(
         'div',
         null,
@@ -31116,12 +31116,12 @@ var Core = function Core(props) {
     );
 };
 
-Core.propTypes = {
+Card.propTypes = {
     title: _propTypes2.default.string.isRequired,
     tids: _propTypes2.default.array
 };
 
-exports.default = Core;
+exports.default = Card;
 
 /***/ }),
 /* 56 */

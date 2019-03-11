@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Term from './Term';
 
-const Core = props => (
+const Card = props => (
 
     <div>
         <h2><a href={`/node/${props.id}`}>{props.title}</a></h2>
@@ -18,9 +18,9 @@ const Core = props => (
 
 );
 
-Core.propTypes = {
+Card.propTypes = {
     title: PropTypes.string.isRequired,
     tids: PropTypes.array
 }
 
-export default Core;
+export default Card;

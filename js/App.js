@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 
 import SearchForm from './components/SearchForm';
-import CoreList from './components/CoreList';
+import CardList from './components/CardList';
 
 class App extends Component{
 
@@ -33,7 +33,7 @@ class App extends Component{
             });
     }
 
-    filterCores = (tids) => {
+    filterCards = (tids) => {
         if(!tids){
             this.setState({
                 tidList: []
@@ -45,7 +45,7 @@ class App extends Component{
         });
     }
 
-    doesCoreContainTid = (coreTids) => {
+    doesCardContainTid = (coreTids) => {
         return this.state.tidList.some(v => coreTids.includes(v));
     }
 
@@ -53,10 +53,10 @@ class App extends Component{
 
         return (
             <div>
-                <SearchForm onSearch={this.filterCores} />
-                <div className="coresList">
-                    <CoreList data={this.state.cards.filter( core => {
-                        return (this.state.tidList.length == 0 || this.doesCoreContainTid(core.tids))
+                <SearchForm onSearch={this.filterCards} />
+                <div className="cardsList">
+                    <CardList data={this.state.cards.filter( card => {
+                        return (this.state.tidList.length == 0 || this.doesCardContainTid(card.tids))
                     })} />
                 </div>
             </div>

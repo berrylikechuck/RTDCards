@@ -6,8 +6,8 @@ import Term from './Term';
 const Core = props => (
 
     <div>
-        <h2><a href={`node/${props.id}`}>{props.title}</a></h2>
-        <div>{props.description}</div>
+        <h2><a href={`/node/${props.id}`}>{props.title}</a></h2>
+        <div dangerouslySetInnerHTML={{__html: props.description}} />
         <ul>
             {props.terms.map(term => <Term key={term.tid} tid={term.tid} name={term.name} />)}
         </ul>
@@ -24,4 +24,3 @@ Core.propTypes = {
 }
 
 export default Core;
-

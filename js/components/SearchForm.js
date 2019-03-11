@@ -49,7 +49,7 @@ export default class SearchForm extends Component {
                     multi={true}
                     onChange={this.handleSelectChange}
                     options={this.state.terms}
-                    placeholder="Select your favourite(s)"
+                    placeholder="Select keyword(s)"
                     removeSelected={true}
                     rtl={false}
                     simpleValue={true}

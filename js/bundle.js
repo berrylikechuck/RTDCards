@@ -27039,7 +27039,7 @@ var SearchForm = function (_Component) {
                     multi: true,
                     onChange: this.handleSelectChange,
                     options: this.state.terms,
-                    placeholder: 'Select your favourite(s)',
+                    placeholder: 'Select keyword(s)',
                     removeSelected: true,
                     rtl: false,
                     simpleValue: true,
@@ -31096,15 +31096,11 @@ var Core = function Core(props) {
             null,
             _react2.default.createElement(
                 'a',
-                { href: 'node/' + props.id },
+                { href: '/node/' + props.id },
                 props.title
             )
         ),
-        _react2.default.createElement(
-            'div',
-            null,
-            props.description
-        ),
+        _react2.default.createElement('div', { dangerouslySetInnerHTML: { __html: props.description } }),
         _react2.default.createElement(
             'ul',
             null,

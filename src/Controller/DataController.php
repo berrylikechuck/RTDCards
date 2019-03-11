@@ -58,12 +58,16 @@ class DataController extends ControllerBase {
             if($taxonomy_field){
 
                 foreach($node->$taxonomy_field->getValue() as $tid) {
+
                     $term = Term::load($tid['target_id']);
+
                     $tids[] = $tid['target_id'];
+                    
                     $terms[] = [
                         'tid' => $tid['target_id'],
                         'name' => $term->name->value
                     ];
+
                 }
 
             }
@@ -87,20 +91,27 @@ class DataController extends ControllerBase {
 
     public function terms(Request $request) {
 
-        $vocab = 'tags';
+        $settings = \Drupal::config('rtd_cards.settings');
+
+        $vocab = $settings->get('vocab');
 
         $matches = [];
 
         $query = \Drupal::entityQuery('taxonomy_term');
+
         $query->condition('vid', $vocab);
+
         $tids = $query->execute();
 
         foreach($tids as $tid){
+
             $term = Term::load($tid);
+
             $matches[] = [
                 'value' => $tid,
                 'label' => $term->getName()
             ];
+
         }
 
         return new JsonResponse($matches);

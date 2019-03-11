@@ -85,7 +85,7 @@ class DefaultForm extends ConfigFormBase {
     }
 
     public function rtdCardsPageTwo(array &$form, FormStateInterface $form_state) {
-        
+
         $content_type = $form_state->getValue('content_type');
 
         $fields = $this->getFields($content_type);
@@ -114,6 +114,13 @@ class DefaultForm extends ConfigFormBase {
             '#options' => $available_fields['taxonomy_fields'],
             '#title' => $this->t('Which taxonomy field do you want to use?'),
             '#required' => TRUE
+        ];
+
+        // instead of having to call entity field manager again on submit
+        // storing taxonomy field and associated vocabulary in json encoded array
+        $form['vocabs'] = [
+            '#type' => 'hidden',
+            '#default_value' => json_encode($available_fields['taxonomy_vocabs'])
         ];
 
         $form['back'] = [
@@ -151,11 +158,21 @@ class DefaultForm extends ConfigFormBase {
      */
     public function submitForm(array &$form, FormStateInterface $form_state) {
 
+        // decoding taxonomy field and associated vocab
+        // to store vocab in a variable for use in json feed
+        $vocabs = json_decode($form_state->getValue('vocabs'), true);
+
+        $taxonomy_field = $form_state->getValue('taxonomy_field');
+
+        // getting vocab to store
+        $vocab = $vocabs[$taxonomy_field];
+
         $this->config('rtd_cards.settings')
             ->set('content_type', $form_state->getValue('content_type'))
             ->set('text_field', $form_state->getValue('text_field'))
             ->set('image_field', $form_state->getValue('image_field'))
-            ->set('taxonomy_field', $form_state->getValue('taxonomy_field'))
+            ->set('taxonomy_field', $taxonomy_field)
+            ->set('vocab', $vocab)
             ->save();
 
         parent::submitForm($form, $form_state);
@@ -196,6 +213,8 @@ class DefaultForm extends ConfigFormBase {
 
         $taxonomy_fields = [];
 
+        $taxonomy_vocabs = [];
+
         $text_types = [
             'text',
             'text_long',
@@ -225,9 +244,15 @@ class DefaultForm extends ConfigFormBase {
 
             if($field_type == 'entity_reference') {
 
-                $tax_library = $field->get('settings')['handler_settings']['target_bundles']['tags'];
+                $tax_library = $field->get('settings')['handler_settings']['target_bundles'];
 
-                $taxonomy_fields[$field->get('field_name')] = $field->label();
+                $vocab = current($tax_library);
+
+                $field_name = $field->get('field_name');
+
+                $taxonomy_fields[$field_name] = $field->label();
+
+                $taxonomy_vocabs[$field_name ] = $vocab;
 
                 continue;
 
@@ -244,7 +269,8 @@ class DefaultForm extends ConfigFormBase {
         return [
             'image_fields' => $image_fields,
             'text_fields' => $text_fields,
-            'taxonomy_fields' => $taxonomy_fields
+            'taxonomy_fields' => $taxonomy_fields,
+            'taxonomy_vocabs' => $taxonomy_vocabs
         ];
 
     }

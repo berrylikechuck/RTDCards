@@ -62,7 +62,7 @@ class DataController extends ControllerBase {
                     $term = Term::load($tid['target_id']);
 
                     $tids[] = $tid['target_id'];
-                    
+
                     $terms[] = [
                         'tid' => $tid['target_id'],
                         'name' => $term->name->value

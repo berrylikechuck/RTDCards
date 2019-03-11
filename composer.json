@@ -1,0 +1,14 @@
+{
+  "name": "berrylikechuck/rtd_cards",
+  "type": "drupal-module",
+  "description": "Adds a React app through a Drupal 8 module that will visually filter a content type based on taxonomy terms.",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://github.com/berrylikechuck/RTDCards",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://github.com/berrylikechuck/RTDCards/issues",
+    "source": "https://github.com/berrylikechuck/RTDCards"
+  },
+  "require": { }
+}

@@ -3,5 +3,6 @@ rtd_cards.default_form:
   route_name: rtd_cards.default_form
   description: 'Configure RTD Cards'
   parent: system.admin_config_services
+  weight: 99
 
 

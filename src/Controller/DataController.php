@@ -45,11 +45,17 @@ class DataController extends ControllerBase {
 
             $node = Node::load($nid);
 
+            $imageUri = null;
+
             $tids = [];
 
             $terms = [];
 
-            if($image_field) {
+            // image field is not required
+            // if an image field is selected from admin page
+            // and the content has the image field populated
+            // populate path to image
+            if($image_field && $node->$image_field->entity) {
 
                 $imageUri = file_create_url($node->$image_field->entity->getFileUri());
 
@@ -77,7 +83,7 @@ class DataController extends ControllerBase {
                 "name" => Xss::filter($node->getTitle()),
                 "body" => $node->$text_field->value,
                 "image" => [
-                    "path" => $image_field ? $imageUri : ""
+                    "path" => $imageUri ? $imageUri : ""
                 ],
                 "tids" => $taxonomy_field ? $tids : "",
                 "terms" => $taxonomy_field ? $terms : ""

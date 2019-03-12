@@ -5,15 +5,19 @@ import Term from './Term';
 
 const Card = props => {
 
-    const styles = {
+    const bgImage = {
       backgroundImage: `url(${props.image.path})`,
       backgroundPosition: `center center`,
       backgroundRepeat: `no-repeat`,
       backgroundSize: `cover`
     };
 
+    const bgColor = {
+      backgroundColor: `#DDD`
+    };
+
     return (
-      <div className="card" style={ styles }>
+      <div className="card" style={ props.image.path ? bgImage : bgColor }>
         <h2><a href={`/node/${props.id}`}>{props.title}</a></h2>
         <div dangerouslySetInnerHTML={{__html: props.description}} />
         <ul>

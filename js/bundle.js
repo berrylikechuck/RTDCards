@@ -31085,16 +31085,20 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var Card = function Card(props) {
 
-  var styles = {
+  var bgImage = {
     backgroundImage: 'url(' + props.image.path + ')',
     backgroundPosition: 'center center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover'
   };
 
+  var bgColor = {
+    backgroundColor: '#DDD'
+  };
+
   return _react2.default.createElement(
     'div',
-    { className: 'card', style: styles },
+    { className: 'card', style: props.image.path ? bgImage : bgColor },
     _react2.default.createElement(
       'h2',
       null,

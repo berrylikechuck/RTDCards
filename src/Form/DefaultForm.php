@@ -100,7 +100,8 @@ class DefaultForm extends ConfigFormBase {
         $form['text_field'] = [
             '#type' => 'radios',
             '#options' => $available_fields['text_fields'],
-            '#title' => $this->t('Which text field do you want to use?')
+            '#title' => $this->t('Which text field do you want to use?'),
+            '#required' => TRUE
         ];
 
         $form['image_field'] = [

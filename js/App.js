@@ -54,11 +54,9 @@ class App extends Component{
         return (
             <div>
                 <SearchForm onSearch={this.filterCards} />
-                <div className="cardsList">
-                    <CardList data={this.state.cards.filter( card => {
-                        return (this.state.tidList.length == 0 || this.doesCardContainTid(card.tids))
-                    })} />
-                </div>
+                <CardList data={this.state.cards.filter( card => {
+                    return (this.state.tidList.length == 0 || this.doesCardContainTid(card.tids))
+                })} />
             </div>
         );
 

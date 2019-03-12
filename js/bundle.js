@@ -1406,13 +1406,9 @@ var App = function (_Component) {
                 'div',
                 null,
                 _react2.default.createElement(_SearchForm2.default, { onSearch: this.filterCards }),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'cardsList' },
-                    _react2.default.createElement(_CardList2.default, { data: this.state.cards.filter(function (card) {
-                            return _this2.state.tidList.length == 0 || _this2.doesCardContainTid(card.tids);
-                        }) })
-                )
+                _react2.default.createElement(_CardList2.default, { data: this.state.cards.filter(function (card) {
+                        return _this2.state.tidList.length == 0 || _this2.doesCardContainTid(card.tids);
+                    }) })
             );
         }
     }]);
@@ -31045,8 +31041,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var CardList = function CardList(props) {
 
-    //const results = props.data;
     var cards = void 0;
+
     if (props.data.length) {
         cards = props.data.map(function (card) {
             return _react2.default.createElement(_Card2.default, { key: card.id, id: card.id, title: card.name, description: card.body, tids: card.tids, terms: card.terms, image: card.image });
@@ -31055,7 +31051,7 @@ var CardList = function CardList(props) {
 
     return _react2.default.createElement(
         'div',
-        null,
+        { className: 'cardsList' },
         cards
     );
 };
@@ -31070,7 +31066,7 @@ exports.default = CardList;
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _react = __webpack_require__(2);
@@ -31088,37 +31084,40 @@ var _Term2 = _interopRequireDefault(_Term);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Card = function Card(props) {
-    return _react2.default.createElement(
-        'div',
-        null,
-        _react2.default.createElement(
-            'h2',
-            null,
-            _react2.default.createElement(
-                'a',
-                { href: '/node/' + props.id },
-                props.title
-            )
-        ),
-        _react2.default.createElement('div', { dangerouslySetInnerHTML: { __html: props.description } }),
-        _react2.default.createElement(
-            'ul',
-            null,
-            props.terms.map(function (term) {
-                return _react2.default.createElement(_Term2.default, { key: term.tid, tid: term.tid, name: term.name });
-            })
-        ),
-        _react2.default.createElement(
-            'div',
-            null,
-            _react2.default.createElement('img', { src: '' + props.image.path, alt: '' + props.image.alt })
-        )
-    );
+
+  var styles = {
+    backgroundImage: 'url(' + props.image.path + ')',
+    backgroundPosition: 'center center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover'
+  };
+
+  return _react2.default.createElement(
+    'div',
+    { className: 'card', style: styles },
+    _react2.default.createElement(
+      'h2',
+      null,
+      _react2.default.createElement(
+        'a',
+        { href: '/node/' + props.id },
+        props.title
+      )
+    ),
+    _react2.default.createElement('div', { dangerouslySetInnerHTML: { __html: props.description } }),
+    _react2.default.createElement(
+      'ul',
+      null,
+      props.terms.map(function (term) {
+        return _react2.default.createElement(_Term2.default, { key: term.tid, tid: term.tid, name: term.name });
+      })
+    )
+  );
 };
 
 Card.propTypes = {
-    title: _propTypes2.default.string.isRequired,
-    tids: _propTypes2.default.array
+  title: _propTypes2.default.string.isRequired,
+  tids: _propTypes2.default.array
 };
 
 exports.default = Card;

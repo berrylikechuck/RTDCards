@@ -1,6 +1,6 @@
 {
   "name": "berrylikechuck/rtd_cards",
-  "type": "drupal-module",
+  "type": "drupal-custom-module",
   "description": "Adds a React app through a Drupal 8 module that will visually filter a content type based on taxonomy terms.",
   "keywords": ["Drupal"],
   "license": "GPL-2.0+",

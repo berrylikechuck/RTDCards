@@ -12,7 +12,7 @@ rtd_cards.cards:
   path: '/data/cards'
   defaults:
     _controller: '\Drupal\rtd_cards\Controller\DataController::cards'
-    _title: 'Full Nodes'
+    _format: json
   requirements:
     _permission: 'access content'
 
@@ -20,6 +20,6 @@ rtd_cards.terms:
   path: '/data/terms'
   defaults:
     _controller: '\Drupal\rtd_cards\Controller\DataController::terms'
-    _title: 'Terms'
+    _format: json
   requirements:
     _permission: 'access content'

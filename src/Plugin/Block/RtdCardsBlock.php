@@ -1,8 +1,11 @@
 <?php
+
 namespace Drupal\rtd_cards\Plugin\Block;
+
 use Drupal\Core\Block\BlockBase;
+
 /**
- * Provides a 'RTD Cards' Block
+ * Provides a 'RTD Cards' Block.
  *
  * @Block(
  *   id = "rtd_cards_block",
@@ -10,12 +13,14 @@ use Drupal\Core\Block\BlockBase;
  * )
  */
 class RtdCardsBlock extends BlockBase {
-    /**
-     * {@inheritdoc}
-     */
-    public function build() {
-        $build['#markup'] = $this->t('<div id="cards-app"></div>');
-        $build['#attached']['library'][] = 'rtd_cards/cards';
-        return $build;
-    }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function build() {
+    $build['#markup'] = $this->t('<div id="cards-app"></div>');
+    $build['#attached']['library'][] = 'rtd_cards/cards';
+    return $build;
+  }
+
 }

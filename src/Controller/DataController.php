@@ -1,127 +1,186 @@
 <?php
-/**
-@file
-Contains \Drupal\rtd_cards\Controller\DataController.
- */
 
 namespace Drupal\rtd_cards\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Drupal\taxonomy\Entity\Term;
-use Drupal\node\Entity\Node;
 use Drupal\Component\Utility\Xss;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
+/**
+ * Queries for data routes.
+ *
+ * @package Drupal\rtd_cards\Controller
+ */
 class DataController extends ControllerBase {
 
-    public function cards(Request $request) {
+  /**
+   * Entity Type Manager.
+   *
+   * @var Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
 
-        $matches = [];
+  /**
+   * Protected configFactory variable.
+   *
+   * @var Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
 
-        $settings = \Drupal::config('rtd_cards.settings');
+  /**
+   * Class constructor.
+   *
+   * @param Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   Entity Type Manager.
+   * @param Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   The Config Factory.
+   */
+  public function __construct(EntityTypeManagerInterface $entityTypeManager, ConfigFactoryInterface $configFactory) {
+    $this->entityTypeManager = $entityTypeManager;
+    $this->configFactory = $configFactory;
+  }
 
-        $type = $settings->get('content_type');
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('entity_type.manager'),
+      $container->get('config.factory')
+    );
+  }
 
-        $taxonomy_field = $settings->get('taxonomy_field');
+  /**
+   * Autocomplete suggestions.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   The request.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Returns json response.
+   */
+  public function cards(Request $request) {
 
-        $image_field = $settings->get('image_field');
+    $matches = [];
 
-        $text_field = $settings->get('text_field');
+    $settings = $this->configFactory->get('rtd_cards.settings');
 
-        $tid = $request->query->get('q');
+    $type = $settings->get('content_type');
 
-        $query = \Drupal::entityQuery('node');
-        $query->condition('status', 1);
-        $query->condition('type', $type);
+    $taxonomy_field = $settings->get('taxonomy_field');
 
-        if($tid){
-            $query->condition($taxonomy_field . '.target_id', $tid, 'IN');
+    $image_field = $settings->get('image_field');
+
+    $text_field = $settings->get('text_field');
+
+    $tid = $request->query->get('q');
+
+    $storage = $this->entityTypeManager->getStorage('node');
+
+    $query = $storage->getQuery();
+    $query->condition('status', 1);
+    $query->condition('type', $type);
+    $query->range(0, 5);
+
+    if ($tid) {
+      $query->condition($taxonomy_field . '.target_id', $tid, 'IN');
+    }
+
+    $nids = $query->execute();
+
+    $nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($nids);
+
+    foreach ($nodes as $node) {
+
+      $imageUri = NULL;
+
+      $tids = [];
+
+      $terms = [];
+
+      // Image field is not required
+      // if an image field is selected from admin page
+      // and the content has the image field populated
+      // populate path to image.
+      if ($image_field && $node->$image_field->entity) {
+
+        $imageUri = file_create_url($node->$image_field->entity->getFileUri());
+
+      }
+
+      if ($taxonomy_field) {
+
+        $tags = $node->$taxonomy_field;
+
+        foreach ($tags->referencedEntities() as $tag) {
+
+          $tids[] = $tag->id();
+
+          $terms[] = [
+            'tid' => $tag->id(),
+            'name' => $tag->getName(),
+          ];
+
         }
 
-        $nids = $query->execute();
+      }
 
-        foreach($nids as $nid){
-
-            $node = Node::load($nid);
-
-            $imageUri = null;
-
-            $tids = [];
-
-            $terms = [];
-
-            // image field is not required
-            // if an image field is selected from admin page
-            // and the content has the image field populated
-            // populate path to image
-            if($image_field && $node->$image_field->entity) {
-
-                $imageUri = file_create_url($node->$image_field->entity->getFileUri());
-
-            }
-
-            if($taxonomy_field){
-
-                foreach($node->$taxonomy_field->getValue() as $tid) {
-
-                    $term = Term::load($tid['target_id']);
-
-                    $tids[] = $tid['target_id'];
-
-                    $terms[] = [
-                        'tid' => $tid['target_id'],
-                        'name' => $term->name->value
-                    ];
-
-                }
-
-            }
-
-            $matches[] = [
-                "id" => $nid,
-                "name" => Xss::filter($node->getTitle()),
-                "body" => $node->$text_field->value,
-                "image" => [
-                    "path" => $imageUri ? $imageUri : ""
-                ],
-                "tids" => $taxonomy_field ? $tids : "",
-                "terms" => $taxonomy_field ? $terms : ""
-            ];
-
-        }
-
-        return new JsonResponse($matches);
+      $matches[] = [
+        "id" => $node->id(),
+        "name" => Xss::filter($node->getTitle()),
+        "body" => $node->$text_field->value,
+        "image" => [
+          "path" => $imageUri ? $imageUri : "",
+        ],
+        "tids" => $taxonomy_field ? $tids : "",
+        "terms" => $taxonomy_field ? $terms : "",
+      ];
 
     }
 
-    public function terms(Request $request) {
+    return new JsonResponse($matches);
 
-        $settings = \Drupal::config('rtd_cards.settings');
+  }
 
-        $vocab = $settings->get('vocab');
+  /**
+   * Term suggestions.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Returns json response.
+   */
+  public function terms() {
 
-        $matches = [];
+    $settings = $this->configFactory->get('rtd_cards.settings');
 
-        $query = \Drupal::entityQuery('taxonomy_term');
+    $vocab = $settings->get('vocab');
 
-        $query->condition('vid', $vocab);
+    $matches = [];
 
-        $tids = $query->execute();
+    $storage = $this->entityTypeManager()->getStorage("taxonomy_term");
 
-        foreach($tids as $tid){
+    $query = $storage->getQuery();
 
-            $term = Term::load($tid);
+    $query->condition('vid', $vocab);
 
-            $matches[] = [
-                'value' => $tid,
-                'label' => $term->getName()
-            ];
+    $tids = $query->execute();
 
-        }
+    $terms = $this->entityTypeManager->getStorage('taxonomy_term')->loadMultiple($tids);
 
-        return new JsonResponse($matches);
+    foreach ($terms as $term) {
+
+      $matches[] = [
+        'value' => $term->id(),
+        'label' => $term->getName(),
+      ];
 
     }
+
+    return new JsonResponse($matches);
+
+  }
 
 }

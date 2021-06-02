@@ -3,4 +3,4 @@ cards:
     component:
       css/select-styles.css: {}
   js:
-    js/bundle.js: {}
+    js/build/index.bundle.js: {}

@@ -92,7 +92,7 @@ class DataController extends ControllerBase {
 
     $nids = $query->execute();
 
-    $nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($nids);
+    $nodes = $storage->loadMultiple($nids);
 
     foreach ($nodes as $node) {
 
